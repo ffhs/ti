@@ -1,0 +1,14 @@
+variable a:=0;
+
+function foo() {
+	variable a:=0;
+	a:=bar();
+	a;
+}
+
+function bar() {
+	42;
+}
+
+a:=foo();
+a;

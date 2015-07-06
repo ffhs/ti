@@ -1,0 +1,27 @@
+variable a:=1;
+variable b:=20;
+variable c:=3;
+
+function foo() {
+	variable bar:=0;
+	IF (a > b AND 1 <= 2)
+		bar:=a;
+	ELSE
+		IF (c > b OR c <= 12)
+			bar:=c;
+		ELSE
+			bar:=b;
+		END
+	END 
+	c:=c*bar;
+	c:=c%13;
+	c;
+}
+
+WHILE (a <= 10 )
+	a:=a+1;
+	b:=foo();
+END
+a;
+b;
+c;

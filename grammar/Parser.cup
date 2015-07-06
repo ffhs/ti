@@ -1,0 +1,104 @@
+package ch.ffhs.ti.umk.skript.parser;
+
+import java.util.ArrayList;
+import java_cup.runtime.*;
+import ch.ffhs.ti.umk.skript.instr.*;
+
+terminal PLUS, MINUS, TIMES, DIV, MOD, POW;
+terminal END, IF, ELSE, WHILE, FOR;
+terminal EQUAL, NOTEQUAL, LESS, BIGGER;
+terminal OR, AND;
+terminal ASSIGN, LPAR, RPAR;
+terminal VAR, SEMICOLON, SEP, LBRACE, RBRACE, COMMA;
+terminal FUNCTION;
+
+terminal String NUMBER, NAME;
+terminal Boolean BOOLCONST;
+
+non terminal Instruction SCRIPT;
+non terminal ArrayList<Instruction> ASSIGNMENT_LIST;
+non terminal ArrayList<Instruction> STATEMENT_LIST;
+non terminal ArrayList<Instruction> METHOD_LIST;
+non terminal ArrayList<Instruction> ARGUMENT_LIST;
+non terminal ArrayList<String> PARAMETER_LIST;
+non terminal Instruction ASSIGNMENT;
+non terminal Instruction METHOD_CALL;
+non terminal Instruction STATEMENT, SINGLE_LINE_STATEMENT, SIMPLE_TERM, PRODUCT, POWER, SUM;
+non terminal Instruction METHOD, BLOCK;
+non terminal CONDITIONAL_EXPRESSION, CONDITION;
+non terminal ENDE;
+
+start with SCRIPT;
+
+SCRIPT ::= ASSIGNMENT_LIST:a METHOD_LIST:ml STATEMENT_LIST:s ENDE
+																{: RESULT = new InstructionScript(a, ml, s); :};
+
+BLOCK ::=	LBRACE SEP ASSIGNMENT_LIST:al STATEMENT_LIST:sl RBRACE
+											{: RESULT = new InstructionBlock(al, sl); :};
+
+STATEMENT_LIST ::=                          {:  RESULT = new ArrayList<Instruction>(); :}
+	|  STATEMENT_LIST:sl STATEMENT:s    	{:  RESULT = sl;  RESULT.add(s); :};
+
+METHOD_LIST ::=                             {:  RESULT = new ArrayList<Instruction>(); :}
+	|  METHOD_LIST:ml METHOD:m 				{:  RESULT = ml; RESULT.add(m); :};   
+
+ASSIGNMENT_LIST ::=                         {:  RESULT = new ArrayList<Instruction>(); :}
+	|  ASSIGNMENT_LIST:al ASSIGNMENT:a      {:  RESULT = al; RESULT.add(a); :};
+
+ASSIGNMENT ::= VAR NAME:n ASSIGN SINGLE_LINE_STATEMENT:s   	{: RESULT = new InstructionInitVariable(n, s); :};
+
+METHOD ::= FUNCTION NAME:n LPAR PARAMETER_LIST:pl RPAR BLOCK:b SEP
+																{: RESULT = new InstructionMethod(n, pl, b); :};
+
+PARAMETER_LIST ::=                          		{:  RESULT = new ArrayList<String>(); :}
+		 |  PARAMETER_LIST:pl NAME:n				{:  RESULT = pl; RESULT.add(n); :}        
+		 |  PARAMETER_LIST:pl COMMA NAME:n			{:  RESULT = pl; RESULT.add(n); :};
+                                            
+ARGUMENT_LIST ::=                           		{:  RESULT = new ArrayList<Instruction>(); :}
+		 |  ARGUMENT_LIST:al SIMPLE_TERM:s			{:  RESULT = al; RESULT.add(s); :}     
+		 |  ARGUMENT_LIST:al COMMA SIMPLE_TERM:s	{:  RESULT = al; RESULT.add(s); :};     
+
+STATEMENT ::= SINGLE_LINE_STATEMENT:s											{: RESULT = s; :}
+	|  IF LPAR CONDITIONAL_EXPRESSION:c RPAR SEP STATEMENT_LIST:s1 END SEP		{: RESULT = new InstructionIfElse(s1, c); :}
+	|  IF LPAR CONDITIONAL_EXPRESSION:c RPAR SEP STATEMENT_LIST:s1 ELSE SEP STATEMENT_LIST:s2 END SEP
+     											     				{: RESULT = new InstructionIfElse(s1, s2, c); :}
+	|  FOR LPAR CONDITIONAL_EXPRESSION:c RPAR SEP STATEMENT_LIST:s END SEP       {: RESULT = new InstructionForWhile(s, c); :}
+	|  WHILE LPAR CONDITIONAL_EXPRESSION:c RPAR SEP STATEMENT_LIST:s END SEP     {: RESULT = new InstructionForWhile(s, c); :};
+	
+SINGLE_LINE_STATEMENT ::= SUM:p SEMICOLON SEP					{: RESULT = p; :}
+	|  NAME:n ASSIGN SUM:s SEMICOLON SEP    					{: RESULT = new InstructionSetVariable(n, s); :}
+	|  NAME:n ASSIGN METHOD_CALL:m SEMICOLON SEP                {: RESULT = new InstructionSetVariable(n, m); :};
+
+METHOD_CALL ::= NAME:n LPAR ARGUMENT_LIST:al RPAR				{: RESULT = new InstructionMethodCall(n,al); :};
+
+SUM ::= PRODUCT:p							{: RESULT = p; :}
+     |  MINUS PRODUCT:p						{: RESULT = new InstructionNegate(p); :}	
+     |  SUM:s PLUS PRODUCT:p				{: RESULT = new InstructionBinaryOperation(BinaryOperator.PLUS, s, p); :}
+     |  SUM:s MINUS PRODUCT:p				{: RESULT = new InstructionBinaryOperation(BinaryOperator.MINUS, s, p); :};
+     
+PRODUCT ::= POWER:pp						{: RESULT = pp; :}
+         |  PRODUCT:p TIMES POWER:pp		{: RESULT = new InstructionBinaryOperation(BinaryOperator.TIMES, p, pp); :}
+         |  PRODUCT:p DIV POWER:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.DIV, p, pp); :}
+         |  PRODUCT:p MOD POWER:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.MOD, p, pp); :};
+                    
+POWER ::= SIMPLE_TERM:st					{: RESULT = st; :}
+        | SIMPLE_TERM:st POW POWER:pp		{: RESULT = new InstructionBinaryOperation(BinaryOperator.POW, st, pp); :};
+        
+SIMPLE_TERM ::= NAME:n						{: RESULT = new InstructionGetVariable(n); :}
+             |  NUMBER:n					{: RESULT = InstructionConstant.integer(n); :}
+             |  LPAR SUM:s RPAR				{: RESULT = s; :};
+
+CONDITIONAL_EXPRESSION ::= CONDITION:c		{: RESULT = c; :}
+	| CONDITION:c1 OR CONDITION:c2 			{: RESULT = new InstructionOr(c1,c2); :}
+	| CONDITION:c1 AND CONDITION:c2			{: RESULT = new InstructionAnd(c1,c2); :};
+
+CONDITION ::= BOOLCONST:c  					{: RESULT = c; :}
+	| SUM:p1 EQUAL SUM:p2           		{: RESULT = new InstructionCompareOpertor(BinaryOperator.EQUAL, p1, p2 ); :}
+    | SUM:p1 NOTEQUAL SUM:p2        		{: RESULT = new InstructionCompareOpertor(BinaryOperator.NOTEQUAL, p1, p2 ); :}
+    | SUM:p1 LESS SUM:p2            		{: RESULT = new InstructionCompareOpertor(BinaryOperator.LESS, p1, p2 ); :}
+    | SUM:p1 BIGGER SUM:p2          		{: RESULT = new InstructionCompareOpertor(BinaryOperator.BIGGER, p1, p2 ); :};
+
+ENDE ::= 
+     |  SEP
+     ;
+             

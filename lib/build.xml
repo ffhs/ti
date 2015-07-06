@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<project default="main">
+	<taskdef  classname="JFlex.anttask.JFlexTask" name="jflex" />
+
+	<taskdef  classname="java_cup.anttask.CUPTask" name="cup"/>
+	
+	<property name="project_location" value="C:/Users/vonatzigenc/git/ffhs/vac_compiler"/>
+	
+	<target name="main">
+		
+		<cup 
+			srcfile="${project_location}/grammar/Parser.cup"
+		    destdir="${project_location}/generated"
+		    interface="true"
+			parser="Parser"
+			symbols="Terminals"
+		/>
+
+		<jflex
+		    file="${project_location}/grammar/Scanner.flex"
+		    destdir="${project_location}/generated"
+		/>
+
+	</target>
+</project>
+
