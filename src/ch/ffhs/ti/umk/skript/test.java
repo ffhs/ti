@@ -12,17 +12,14 @@ public class test {
 	 */
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		String input = "2+1;";
 		
 		StringBuilder test = new StringBuilder();
-		test.append("2+1;");
+		test.append("8*8#2+1;");
 		test.append("\n");
 
 		
 		String actual = ScannerCompiler.evaluateInput(test.toString());
-System.out.println(actual );
-	
-		
+		System.out.println(actual );	
 	}
 
 }

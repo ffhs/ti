@@ -43,6 +43,7 @@ COMMENT   = "//".*
 "*"     { return sym(TIMES); }
 "/"     { return sym(DIV); }
 "%"     { return sym(MOD); }
+"#"     { return sym(ROO); }
 "^"    { return sym(POW); }
 ":="    { return sym(ASSIGN); }
 "("     { return sym(LPAR); }

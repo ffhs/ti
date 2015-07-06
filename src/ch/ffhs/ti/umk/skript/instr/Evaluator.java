@@ -1,8 +1,9 @@
 package ch.ffhs.ti.umk.skript.instr;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.math.*;
+
 
 /**
  * Ein Evaluator zum Auswerten von Instructions. Die Klasse ist eine Visitorklasse und wird wie folgt verwendet: instruction.acceptVisitor(evaluator);
@@ -53,6 +54,8 @@ public class Evaluator implements InstructionVisitor<BigInteger> {
 			return left.mod(right);
 		case POW:
 			return left.pow(right.intValue());
+		case ROO:
+			return BigInteger.valueOf((long) Math.pow(left.doubleValue(), 1/right.doubleValue()));
 		default:
 			assert false;
 			return null;

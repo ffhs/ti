@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java_cup.runtime.*;
 import ch.ffhs.ti.umk.skript.instr.*;
 
-terminal PLUS, MINUS, TIMES, DIV, MOD, POW;
+terminal PLUS, MINUS, TIMES, DIV, MOD, POW, ROO;
 terminal END, IF, ELSE, WHILE, FOR;
 terminal EQUAL, NOTEQUAL, LESS, BIGGER;
 terminal OR, AND;
@@ -23,7 +23,7 @@ non terminal ArrayList<Instruction> ARGUMENT_LIST;
 non terminal ArrayList<String> PARAMETER_LIST;
 non terminal Instruction ASSIGNMENT;
 non terminal Instruction METHOD_CALL;
-non terminal Instruction STATEMENT, SINGLE_LINE_STATEMENT, SIMPLE_TERM, PRODUCT, POWER, SUM;
+non terminal Instruction STATEMENT, SINGLE_LINE_STATEMENT, SIMPLE_TERM, PRODUCT, POWER, SUM, ROOT;
 non terminal Instruction METHOD, BLOCK;
 non terminal CONDITIONAL_EXPRESSION, CONDITION;
 non terminal ENDE;
@@ -79,11 +79,17 @@ SUM ::= PRODUCT:p							{: RESULT = p; :}
 PRODUCT ::= POWER:pp						{: RESULT = pp; :}
          |  PRODUCT:p TIMES POWER:pp		{: RESULT = new InstructionBinaryOperation(BinaryOperator.TIMES, p, pp); :}
          |  PRODUCT:p DIV POWER:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.DIV, p, pp); :}
-         |  PRODUCT:p MOD POWER:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.MOD, p, pp); :};
+         |  PRODUCT:p MOD POWER:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.MOD, p, pp); :}
+         |  ROOT:pp							{: RESULT = pp; :}
+         |  PRODUCT:p TIMES ROOT:pp		{: RESULT = new InstructionBinaryOperation(BinaryOperator.TIMES, p, pp); :}
+         |  PRODUCT:p DIV ROOT:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.DIV, p, pp); :}
+         |  PRODUCT:p MOD ROOT:pp			{: RESULT = new InstructionBinaryOperation(BinaryOperator.MOD, p, pp); :};
                     
 POWER ::= SIMPLE_TERM:st					{: RESULT = st; :}
         | SIMPLE_TERM:st POW POWER:pp		{: RESULT = new InstructionBinaryOperation(BinaryOperator.POW, st, pp); :};
-        
+
+ROOT ::= SIMPLE_TERM:sr ROO SIMPLE_TERM:sst	{: RESULT = new InstructionBinaryOperation(BinaryOperator.ROO, sr, sst); :};		
+         
 SIMPLE_TERM ::= NAME:n						{: RESULT = new InstructionGetVariable(n); :}
              |  NUMBER:n					{: RESULT = InstructionConstant.integer(n); :}
              |  LPAR SUM:s RPAR				{: RESULT = s; :};
