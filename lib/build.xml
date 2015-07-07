@@ -5,7 +5,7 @@
 
 	<taskdef  classname="java_cup.anttask.CUPTask" classpath="java-cup-11a.jar" name="cup"/>
 	
-	<property name="project_location" value="/Users/thierrybaumann/Documents/workspace/vac_compiler"/>
+	<property name="project_location" value="/Users/thierrybaumann/Documents/workspace/ti"/>
 	
 	<target name="main">
 		
