@@ -1,19 +1,37 @@
 package ch.ffhs.ti.umk.skript;
 
 import static org.junit.Assert.assertEquals;
+import static ch.ffhs.ti.umk.skript.TestHelper.evalFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 
 import org.junit.Test;
 
-public class FilebasedTest {
+public class FileTest {
 
+	@Test
+	public void testSimple() throws Exception {
+		String filename = "testsimple.txt";
+		String actual = evalFile(filename);
+
+		assertEquals("220", actual);
+	}
+
+	
+	@Test
+	public void testAll() throws Exception {
+		String filename = "testall.txt";
+		String actual = evalFile(filename);
+		assertEquals("11", actual);
+	}
+	
+	
+	
+	/**
+	 * REMOVE
+	 * 
+	 
+	
 	@Test
 	public void testA() throws Exception {
 		String filename = "testA.txt";
@@ -53,11 +71,6 @@ public class FilebasedTest {
 
 		assertEquals("233", actual);
 	}
-
-	private String evalFile(String filename) throws URISyntaxException, IOException, Exception {
-		URI uri = FilebasedTest.class.getClassLoader().getResource(filename).toURI();
-		BufferedReader reader = Files.newBufferedReader(Paths.get(uri), Charset.forName("UTF-8"));
-		return ScannerCompiler.evaluateInput(reader);
-	}
-
+*/
+	
 }

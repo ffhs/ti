@@ -55,7 +55,7 @@ public class Evaluator implements InstructionVisitor<BigInteger> {
 		case POW:
 			return left.pow(right.intValue());
 		case ROO:
-			return BigInteger.valueOf((long) Math.pow(left.doubleValue(), 1/right.doubleValue()));
+			return BigInteger.valueOf((long) Math.round(Math.pow(left.doubleValue(), 1/right.doubleValue())));
 		default:
 			assert false;
 			return null;

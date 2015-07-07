@@ -1,7 +1,8 @@
 package ch.ffhs.ti.umk.skript;
 
 import static org.junit.Assert.assertEquals;
-import static ch.ffhs.ti.umk.skript.TestHelper.lines;
+import static ch.ffhs.ti.umk.skript.TestHelper.write;
+import static ch.ffhs.ti.umk.skript.TestHelper.UNEXP_RESULT;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +15,12 @@ import org.junit.runners.Parameterized.Parameters;
 import ch.ffhs.ti.umk.skript.ScannerCompiler;
 
 @RunWith(Parameterized.class)
-public class SimpleStatementsTest {
+public class DummyTest {
 
 	private final String input;
 	private final String expected;
 
-	public SimpleStatementsTest(String input, String expected) {
+	public DummyTest(String input, String expected) {
 		super();
 		this.input = input;
 		this.expected = expected;
@@ -28,16 +29,18 @@ public class SimpleStatementsTest {
 	@Test
 	public void execTest() throws Exception {
 		String actual = ScannerCompiler.evaluateInput(input);
-		assertEquals("Unexpected Result for input " + input, expected, actual);
+		assertEquals(UNEXP_RESULT + input, expected, actual);
 	}
 
 	@Parameters
-	public static Collection<Object[]> createTestcases() {
-		Collection<Object[]> testcases = new ArrayList<>();
-		testcases.add(new Object[] { lines(""), "" });
-		testcases.add(new Object[] { lines("6;"), "6" });
-		testcases.add(new Object[] { lines("variable a:=5;", "a;"), "5" });
-		return testcases;
+	public static Collection<Object[]> createtests() {
+		Collection<Object[]> tests = new ArrayList<>();
+		
+		tests.add(new Object[] { write(""), "" });
+		tests.add(new Object[] { write("100;"), "100" });
+		tests.add(new Object[] { write("var i:=100;", "i;"), "100" });
+		
+		return tests;
 	}
 
 }

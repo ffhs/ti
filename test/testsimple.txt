@@ -1,0 +1,22 @@
+var x:=0;
+var i:=0;
+
+fun blub() {
+	100*2;
+}
+
+fun bla() {
+	100/5;
+}
+
+fun calc() {
+	var i:=0;
+	i:=blub();
+	i;
+}
+
+x:=bla();
+i:=calc();
+
+i:=i+x;
+i;

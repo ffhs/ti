@@ -1,7 +1,8 @@
 package ch.ffhs.ti.umk.skript;
 
 import static org.junit.Assert.assertEquals;
-import static ch.ffhs.ti.umk.skript.TestHelper.lines;
+import static ch.ffhs.ti.umk.skript.TestHelper.write;
+import static ch.ffhs.ti.umk.skript.TestHelper.UNEXP_RESULT;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +15,12 @@ import org.junit.runners.Parameterized.Parameters;
 import ch.ffhs.ti.umk.skript.ScannerCompiler;
 
 @RunWith(Parameterized.class)
-public class LoopsTest {
+public class ForWhileTest {
 
 	private final String input;
 	private final String expected;
 
-	public LoopsTest(String input, String expected) {
+	public ForWhileTest(String input, String expected) {
 		super();
 		this.input = input;
 		this.expected = expected;
@@ -28,15 +29,17 @@ public class LoopsTest {
 	@Test
 	public void execTest() throws Exception {
 		String actual = ScannerCompiler.evaluateInput(input);
-		assertEquals("Unexpected Result for input " + input, expected, actual);
+		assertEquals(UNEXP_RESULT + input, expected, actual);
 	}
 
 	@Parameters
 	public static Collection<Object[]> createTestcases() {
-		Collection<Object[]> testcases = new ArrayList<>();
-		testcases.add(new Object[] { lines("variable countStep:=0;", "FOR (countStep < 7)", "countStep:=countStep+1;", "countStep;", "END"), "7" });
-		testcases.add(new Object[] { lines("variable countStep:=0;", "WHILE (countStep < 7)", "countStep:=countStep+1;", "countStep;", "END"), "7" });
-		return testcases;
+		Collection<Object[]> tests = new ArrayList<>();
+		
+		tests.add(new Object[] { write("var i:=0;", "FOR (i < 10)", "i:=i+1;", "i;", "END"), "10" });
+		
+		tests.add(new Object[] { write("var i:=0;", "var b:=0;", "WHILE (i < 10)", "i:=i+1;", "b:=i+10;","b;", "END"), "20" });
+		
+		return tests;
 	}
-
 }
