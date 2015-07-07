@@ -1,27 +1,24 @@
-var a:=1;
-var b:=20;
-var c:=3;
+var i:=0;
+var x:=10;
+var y:=20;
 
-fun foo() {
-	var bar:=0;
-	IF (a > b AND 1 <= 2)
-		bar:=a;
+fun calc() {
+	var t:=0;
+	IF (x < y AND false)
+		t:=100;
 	ELSE
-		IF (c > b OR c <= 12)
-			bar:=c;
+		IF (x > y OR 2 > 8)
+			t:=x;
 		ELSE
-			bar:=b;
+			t:=y;
 		END
 	END 
-	c:=c*bar;
-	c:=c%13;
-	c;
+	t:=t#2;
+	t*2;
 }
 
-WHILE (a <= 10 )
-	a:=a+1;
-	b:=foo();
+FOR (i < 10)
+	i:=i+1;
+	x:=calc();
 END
-a;
-b;
-c;
+x;
