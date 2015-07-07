@@ -1,0 +1,14 @@
+var a:=0;
+
+fun foo() {
+	var a:=0;
+	a:=bar();
+	a;
+}
+
+fun bar() {
+	42;
+}
+
+a:=foo();
+a;

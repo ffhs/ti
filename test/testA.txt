@@ -1,0 +1,14 @@
+var faktorresult:=1;
+
+fun faktor(input) {
+	var result:=1;
+
+	FOR (input > 0)
+		result:=input*result;
+		input:=input-1;
+		result;
+	END
+}
+
+faktorresult:=faktor(3);
+faktorresult;
