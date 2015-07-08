@@ -44,7 +44,9 @@ COMMENT   = "//".*
 "/"     { return sym(DIV); }
 "%"     { return sym(MOD); }
 "#"     { return sym(ROO); }
-"^"    { return sym(POW); }
+"^"    	{ return sym(POW); }
+"?"		{ return sym(RAND); }
+"§"		{ return sym(LOG); }
 ":="    { return sym(ASSIGN); }
 "("     { return sym(LPAR); }
 ")"     { return sym(RPAR); }

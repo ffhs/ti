@@ -5,12 +5,12 @@
 
 	<taskdef  classname="java_cup.anttask.CUPTask" classpath="java-cup-11a.jar" name="cup"/>
 	
-	<property name="project_location" value="/Users/thierrybaumann/Documents/workspace/ti"/>
+	<property name="project_location" value="/home/pascal/workspace/TI_Project"/>
 	
 	<target name="main">
 		
 		<cup 
-			srcfile="${project_location}/grammar/Parser.cup"
+			srcfile="${project_location}/grammars/Parser.cup"
 		    destdir="${project_location}/generated"
 		    interface="true"
 			parser="Parser"
@@ -18,7 +18,7 @@
 		/>
 
 		<jflex
-		    file="${project_location}/grammar/Scanner.flex"
+		    file="${project_location}/grammars/Scanner.flex"
 		    destdir="${project_location}/generated"
 		/>
 

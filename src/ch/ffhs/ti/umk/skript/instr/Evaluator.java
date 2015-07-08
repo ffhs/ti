@@ -3,6 +3,9 @@ package ch.ffhs.ti.umk.skript.instr;
 import java.util.HashMap;
 import java.util.Map;
 import java.math.*;
+import java.util.Random;
+
+import org.hamcrest.core.IsSame;
 
 
 /**
@@ -56,6 +59,8 @@ public class Evaluator implements InstructionVisitor<BigInteger> {
 			return left.pow(right.intValue());
 		case ROO:
 			return BigInteger.valueOf((long) Math.round(Math.pow(left.doubleValue(), 1/right.doubleValue())));
+		case LOG:
+			return BigInteger.valueOf((long) (Math.log(left.intValue()) / Math.log(right.intValue())));
 		default:
 			assert false;
 			return null;
@@ -190,6 +195,45 @@ public class Evaluator implements InstructionVisitor<BigInteger> {
 		context = prevContext;
 
 		return blockValue;
+	}
+
+	@Override
+	public BigInteger visitOneVarOperation(
+			InstructionOneVarOperation instructionOneVarOperation) {
+		BigInteger operand = instructionOneVarOperation.operand.acceptVisitor(this);
+		
+		switch (instructionOneVarOperation.operator) {
+		case ROO:
+			return BigInteger.valueOf((long) Math.round(Math.pow(operand.doubleValue(), 0.5)));
+		case RAND:
+			int value=1;
+			for(int i=1; i<operand.intValue(); i++)
+			{
+				value=value*10;
+			}
+			Random rnd = new Random();
+			int n = value + rnd.nextInt(value*9);
+			return BigInteger.valueOf(n);
+		case LOG:
+			return BigInteger.valueOf((long) (Math.log(operand.intValue())));
+		default:
+			assert false;
+			return null;
+		}
+	}
+
+	@Override
+	public BigInteger visitSymbolOperation(
+			InstructionSymbolOperation instructionSymbolOperation) {
+		switch (instructionSymbolOperation.operator) {
+		case RAND:
+			Random rnd = new Random();
+			int n = 10000 + rnd.nextInt(90000);
+			return BigInteger.valueOf(n);
+		default:
+			assert false;
+			return null;
+		}
 	}
 
 }
