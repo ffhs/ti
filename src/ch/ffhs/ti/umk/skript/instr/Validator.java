@@ -157,4 +157,17 @@ public class Validator implements InstructionVisitor<Object> {
 		}
 		return null;
 	}
+
+	@Override
+	public Object visitOneVarOperation(
+			InstructionOneVarOperation instructionOneVarOperation) {
+		instructionOneVarOperation.operand.acceptVisitor(this);
+		return null;
+	}
+	
+	@Override
+	public Object visitSymbolOperation(
+			InstructionSymbolOperation instructionSymbolOperation) {
+		return null;
+	}
 }

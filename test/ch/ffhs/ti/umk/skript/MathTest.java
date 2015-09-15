@@ -57,9 +57,17 @@ public class MathTest {
 		tests.add(new Object[] { write("2*(-3);"), "-6" });
 		tests.add(new Object[] { write("-2*(-8);"), "16" });
 		
+
+		
+		tests.add(new Object[] { write("16#;"), "4" });
+		tests.add(new Object[] { write("16#2;"), "4" });
+		tests.add(new Object[] { write("256#3;"), "6" });
+		
+		tests.add(new Object[] { write("100§10;"), "2" });
+		tests.add(new Object[] { write("100§;"), "4" });
+
 		tests.add(new Object[] { write("2*10+20/5+2;"), "26" });
 		tests.add(new Object[] { write("10/2+40-10+3*10-(-10);"), "75" });
-		
 		return tests;
 	}
 }

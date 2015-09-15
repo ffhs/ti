@@ -4,6 +4,10 @@ public interface InstructionVisitor<R> {
 	public R visitScript(InstructionScript instructionScript);
 
 	public R visitBinaryOperation(InstructionBinaryOperation instructionBinOperation);
+	
+	public R visitOneVarOperation(InstructionOneVarOperation instructionOneVarOperation);
+	
+	public R visitSymbolOperation(InstructionSymbolOperation instructionSymbolOperation);
 
 	public R visitNegation(InstructionNegate instructionUnaryOperation);
 

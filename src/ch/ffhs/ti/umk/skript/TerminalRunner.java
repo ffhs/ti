@@ -23,7 +23,6 @@ public class TerminalRunner {
             {
                 StringBuilder sb = new StringBuilder();
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                
                 for (;;)
                 {
                     String line = br.readLine();
@@ -37,7 +36,6 @@ public class TerminalRunner {
                     System.out.println("DONE");
                     return;
                 }
-
         		System.out.println(ScannerCompiler.evaluateInput(new StringReader(script)));	
             }
             catch (Exception ex)

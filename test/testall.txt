@@ -1,7 +1,7 @@
 var i:=0;
 var x:=10;
 var y:=20;
-
+var z:=1;
 fun calc() {
 	var t:=0;
 	IF (x < y AND false)
@@ -14,6 +14,8 @@ fun calc() {
 		END
 	END 
 	t:=t#2;
+	z:=t§2;
+	z:=2?+2;
 	t*2;
 }
 
